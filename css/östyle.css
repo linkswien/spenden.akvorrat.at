@@ -43,12 +43,7 @@
 	font-style: normal;
 }
 
-
-
-
-
-
-
+s
 /* TRIVIALS */
 
 * {
@@ -63,7 +58,7 @@ html {
 
 body {
 	color: #000;
-	background-color: #ffffff;
+	background-color: #BFBFBF;
 	font-size: 20px;
 	font-family: "Roboto", "OpenSans", "Helvetica Neue", "Helvetica", sans-serif;
 }
@@ -75,7 +70,6 @@ h4,
 h5,
 h6 {
 	font-family: "Roboto Condensed", "Raleway", sans-serif;
-	/*	font-style: italic;*/
 	font-weight: bold;
 	color: #5E219E;
 }
@@ -138,7 +132,7 @@ p:last-child {
 a {
 	color: #5E219E;
 	text-decoration: none;
-	border-bottom: 1px solid #5E219E;
+	border-bottom: 1px solid rgba(213, 19, 23, 0);
 	-webkit-transition: color 0.3s ease, border-bottom 0.3s ease;
 	transition: color 0.3s ease, border-bottom 0.3s ease;
 }
@@ -146,7 +140,7 @@ a {
 a:hover:not(.btn):not(.noborder),
 a:focus:not(.btn):not(.noborder) {
 	color: inherit;
-	border-bottom: 1px solid #5E219E;
+	border-bottom: 1px solid rgba(213, 19, 23, 0);
 }
 
 a.dark {
@@ -852,7 +846,7 @@ div.center > p {
 }
 
 .small {
-	font-size: 120%;
+	font-size: 80%;
 }
 
 .border {
