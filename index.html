@@ -24,13 +24,16 @@
 	<meta name="twitter:description" content="Wir kämpfen für ein gerechtes Wien für alle – nicht nur jene, die es sich leisten können! Deswegen nehmen wir auch keine Spenden von großen Unternehmen oder Lobbys an. Um trotzdem eine kraftvolle politische Arbeit leisten zu können, brauchen wir deine Unterstützung. Gemeinsam kämpfen wir für ein gutes Leben für alle Wiener_innen – hilfst du mit?" />
 	<meta name="twitter:site" content="@linkswien" />
 
+	<title>Spenden | LINKS Wien</title>
+
 	<link rel="shortcut icon" href="./img/favicon.png" type="image/png" />
+
 	<link type="text/css" rel="stylesheet" href="./css/normalize.css" />
 	<link type="text/css" rel="stylesheet" href="./css/slick.css" />
 	<link type="text/css" rel="stylesheet" href="./css/slick-theme.css" />
 	<link type="text/css" rel="stylesheet" href="./css/font-awesome.min.css" />
 	<link type="text/css" rel="stylesheet" href="./css/style.css" />
-	<title>Spenden | LINKS Wien</title>
+	<link type="text/css" rel="stylesheet" href="css/new.css" />
 </head>
 
 <body>
@@ -56,7 +59,7 @@
 	<main>
 		<section id="donate">
 			<h2 style="text-transform: uppercase;font-weight:bold;font-style:italic;">Jetzt spenden!</h2>
-			<p>Wir kämpfen für ein gerechtes Wien für alle – nicht nur jene, die es sich leisten können! Deswegen nehmen wir auch keine Spenden von großen Unternehmen oder Lobbys an. Um trotzdem eine kraftvolle politische Arbeit leisten zu können, brauchen wir deine Unterstützung. Gemeinsam kämpfen wir für ein gutes Leben für alle Wiener_innen – hilfst du mit?</p>
+			<p>Wir kämpfen für ein gerechtes Wien für alle – nicht nur jene, die es sich leisten können! Deswegen nehmen wir auch keine Spenden von großen Unternehmen oder Lobbys an. Um trotzdem eine kraftvolle politische Arbeit leisten zu können, brauchen wir deine Unterstützung. Gemeinsam kämpfen wir für ein gutes Leben für alle Wiener*innen – hilfst du mit?</p>
 
 			<p><strong>Unterstütze LINKS jetzt mit deiner Spende und sei Teil der Veränderung!</strong></p>
 
@@ -80,6 +83,14 @@
 						<label for="methods-amount-100">100</label>
 						<input type="radio" name="amount" id="methods-amount-200" value="200" required="required">
 						<label for="methods-amount-200">200</label>
+						<input type="radio" name="amount" id="methods-amount-custom" value="custom" required="required">
+						<label for="methods-amount-custom">Eigener Betrag</label>
+
+						<div class="field-group custom-amount-group hidden">
+							<label for="custom-amount" class="hidden">Eigener Betrag</label>
+							<input type="text" name="custom-amount" id="custom-amount" placeholder="35€" maxlength="4" required>
+							<div class="field-error"></div>
+						</div>
 					</div>
 					<div class="grp-interval row">
 						<input type="radio" name="interval" id="methods-interval-once" value="0" required="required">
@@ -88,7 +99,13 @@
 						<label for="methods-interval-month">Monatlich</label>
 					</div>
 					<div class="row">
-						<a id="button-credit" href="javascript:redirectToStripe()"><div class="column"><i class="fa fa-credit-card-alt" aria-hidden="true"></i><span>Kreditkarte</span></div></a>
+						<a onclick="gotoPaymentForm('method-card')">
+							<div class="column"><i class="fa fa-credit-card-alt" aria-hidden="true"></i><span>Kreditkarte</span></div>
+						</a>
+						<a onclick="gotoPaymentForm('method-sepa')">
+							<div class="column"><i class="fa fa-university" aria-hidden="true"></i><span>Lastschrift</span></div>
+						</a>
+
 						<form id="form-paypal-1" name="_xclick" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" autocomplete="off" class="nospace">
 							<input type="hidden" name="a3" id="paypal-1-amount" value="25">
 							<input type="hidden" name="p3" id="paypal-1-interval" value="1">
@@ -97,9 +114,9 @@
 							<input type="hidden" name="business" value="spenden@links-wien.at">
 							<input type="hidden" name="src" value="1">
 							<input type="hidden" name="currency_code" value="EUR">
-							<button id="button-paypal-1" type="submit">
+							<a id="button-paypal-1" type="submit">
 								<div class="column"><i class="fa fa-paypal" aria-hidden="true"></i><span>Paypal</span></div>
-							</button>
+							</a>
 						</form>
 						<form id="form-paypal-2" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" autocomplete="off" class="hidden nospace">
 							<input type="hidden" name="business" value="spenden@links-wien.at">
@@ -107,97 +124,108 @@
 							<input type="hidden" name="item_name" value="Spende an LINKS Wien">
 							<input type="hidden" name="cmd" value="_donations">
 							<input type="hidden" name="currency_code" value="EUR">
-							<button id="button-paypal-2" type="submit">
+							<a id="button-paypal-2" type="submit">
 								<div class="column"><i class="fa fa-paypal" aria-hidden="true"></i><span>Paypal</span></div>
-							</button>
+							</a>
 						</form>
 					</div>
 				</div>
 				<p class="center small">
-					Oder per <a href="javascript:swipe('method-transfer')"><span>Überweisung</span></a>.
+					Oder per <a onclick="swipe('method-transfer')"><span>Überweisung</span></a>
 				</p>
 			</div>
 
 			<div id="payment-methods">
-				<div id="method-debit" class="hidden">
-					<h2><span class="foemi hidden">Dauerauftrag</span><span class="lastschrift">BANKEINZUG (einmalig)</span></h2>
-					<!--<p><span class="foemi hidden">Mit Abschluss eines Dauerauftrages hilfst du uns in Form eines frei gewählten regelmäßigen Beitrages.</span><span class="lastschrift">Regelmäßige Spenden ermöglichen eine bessere Planung unserer ehrenamtlichen politischen Arbeit. Wenn du schon öfter ein Formular hier generiert hast, könntest du daran interessiert sein, <a href="javascript:becomeSupporter()">einen Dauerauftrag abzuschließen</a>.</span></p>-->
-					<p>Dieses Tool generiert ein ausgefülltes Formular zur Beantragung <span class="foemi hidden">des Lastschriftauftrags</span><span class="lastschrift">des Lastschriftauftrags</span>. Das generierte Dokument musst du ausdrucken, unterschreiben und einscannen (oder elektronisch signieren). Sobald es unterschrieben wurde, <span class="foemi hidden"><a href="mailto:kontakt@links-wien?subject=Spende%20per%20Dauerauftrag">sende es uns</a></span><span class="lastschrift"><a href="mailto:kontakt@links-wien.at?subject=Spende%20per%20Bankeinzug">sende es uns</a></span> bitte.
-						<p>Die Formulardaten werden von uns nur <span class="foemi hidden">für den internen Zweck der Verwaltung von Spendendaten sowie </span>für den SEPA Auftrag verwendet. Unter keinen Umständen werden wir deine Daten an Dritte weiter geben. Zur Abwicklung von Spenden kann es notwendig sein, dass wir dich kontaktieren. Dies ist etwa der Fall bei SEPA Abbuchungen von nicht gedeckten Konten, die bei uns Kosten erzeugen. </p>
-						<form autocomplete="off" action="javascript:genpdf();" class="shrunk">
-							<div class="row row-space align-left">
-								<div class="column">
-									<label for="debit-lastname">Nachname *</label>
-									<input type="text" name="lastname" id="debit-lastname" required="required">
-								</div>
-								<div class="column">
-									<label for="debit-firstname">Vorname *</label>
-									<input type="text" name="firstname" id="debit-firstname" required="required">
-								</div>
-								<div class="row row-space">
-									<div class="column weight75">
-										<label for="debit-street">Straße</label>
-										<input type="text" name="street" id="debit-street">
-									</div>
-									<div class="column weight25">
-										<label for="debit-number">Hausnr.</label>
-										<input type="text" name="number" id="debit-number">
-									</div>
-								</div>
-								<div class="row row-space">
-									<div class="column weight25">
-										<label for="debit-zip">PLZ</label>
-										<input type="text" name="zip" id="debit-zip" pattern="\d{4}">
-									</div>
-									<div class="column weight75">
-										<label for="debit-residence">Ort</label>
-										<input type="text" name="residence" id="debit-residence">
-									</div>
-								</div>
-								<div class="column">
-									<label for="debit-email">E-Mail *</label>
-									<input type="email" name="email" id="debit-email" required="required">
-								</div>
-								<div class="column">
-									<label for="debit-newsletter" class="space"><input type="checkbox" name="newsletter" id="debit-newsletter" value="yes">Newsletter abonnieren</label>
-								</div>
-								<div class="column">
-									<label for="debit-phone">Telefon</label>
-									<input type="text" name="phone" id="debit-phone">
-								</div>
-								<div class="column">
-									<!-- PLACEHOLDER -->
-								</div>
-								<div class="column">
-									<label for="debit-bank">Bank *</label>
-									<input type="text" name="bank" id="debit-bank" required="required">
-								</div>
-								<div class="column">
-									<label for="debit-iban">IBAN *</label>
-									<input type="text" name="iban" id="debit-iban" required="required" pattern="AT\d{2}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}|BE\d{2}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}|BG\d{2}\s{1}[A-Z]{4}\s{1}\d{4}\s{1}\d{2}[A-Za-z0-9]{2}\s{1}[A-Za-z0-9]{4}\s{1}[A-Za-z0-9]{2}|CH\d{2}\s{1}\d{4}\s{1}\d{1}[A-Za-z0-9]{3}\s{1}[A-Za-z0-9]{4}\s{1}[A-Za-z0-9]{4}\s{1}[A-Za-z0-9]{1}|CY\d{2}\s{1}\d{4}\s{1}\d{4}\s{1}[A-Za-z0-9]{4}\s{1}[A-Za-z0-9]{4}\s{1}[A-Za-z0-9]{4}\s{1}[A-Za-z0-9]{4}|CZ\d{2}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}|DE\d{2}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}\s{1}\d{2}|DK\d{2}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}\s{1}\d{2}|EE\d{2}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}|ES\d{2}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}|FO\d{2}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}\s{1}\d{2}|GB\d{2}\s{1}[A-Z]{4}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}\s{1}\d{2}|GI\d{2}\s{1}[A-Z]{4}\s{1}[A-Za-z0-9]{4}\s{1}[A-Za-z0-9]{4}\s{1}[A-Za-z0-9]{4}\s{1}[A-Za-z0-9]{3}|GL\d{2}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}\s{1}\d{2}|HR\d{2}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}\s{1}\d{1}|HU\d{2}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}|IE\d{2}\s{1}[A-Z]{4}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}\s{1}\d{2}|IS\d{2}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}\s{1}\d{2}|IT\d{2}\s{1}[A-Z]{1}\d{3}\s{1}\d{4}\s{1}\d{3}[A-Za-z0-9]{1}\s{1}[A-Za-z0-9]{4}\s{1}[A-Za-z0-9]{4}\s{1}[A-Za-z0-9]{3}|LI\d{2}\s{1}\d{4}\s{1}\d{1}[A-Za-z0-9]{3}\s{1}[A-Za-z0-9]{4}\s{1}[A-Za-z0-9]{4}\s{1}[A-Za-z0-9]{1}|LT\d{2}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}|LU\d{2}\s{1}\d{3}[A-Za-z0-9]{1}\s{1}[A-Za-z0-9]{4}\s{1}[A-Za-z0-9]{4}\s{1}[A-Za-z0-9]{4}|LV\d{2}\s{1}[A-Z]{4}\s{1}[A-Za-z0-9]{4}\s{1}[A-Za-z0-9]{4}\s{1}[A-Za-z0-9]{4}\s{1}[A-Za-z0-9]{1}|MC\d{2}\s{1}\d{4}\s{1}\d{4}\s{1}\d{2}[A-Za-z0-9]{2}\s{1}[A-Za-z0-9]{4}\s{1}[A-Za-z0-9]{4}\s{1}[A-Za-z0-9]{1}\d{2}|MT\d{2}\s{1}[A-Z]{4}\s{1}\d{4}\s{1}\d{1}[A-Za-z0-9]{3}\s{1}[A-Za-z0-9]{4}\s{1}[A-Za-z0-9]{4}\s{1}[A-Za-z0-9]{4}\s{1}[A-Za-z0-9]{3}|NL\d{2}\s{1}[A-Z]{4}\s{1}\d{4}\s{1}\d{4}\s{1}\d{2}|PL\d{2}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}|PT\d{2}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}\s{1}\d{1}|RO\d{2}\s{1}[A-Z]{4}\s{1}[A-Za-z0-9]{4}\s{1}[A-Za-z0-9]{4}\s{1}[A-Za-z0-9]{4}\s{1}[A-Za-z0-9]{4}|SE\d{2}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}|SI\d{2}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}\s{1}\d{3}|SK\d{2}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}\s{1}\d{4}|SM\d{2}\s{1}[A-Z]{1}\d{3}\s{1}\d{4}\s{1}\d{3}[A-Za-z0-9]{1}\s{1}[A-Za-z0-9]{4}\s{1}[A-Za-z0-9]{4}\s{1}[A-Za-z0-9]{3}">
-								</div>
-								<div class="column">
-									<label for="debit-bic">BIC *</label>
-									<input type="text" name="bic" id="debit-bic" required="required" pattern="[A-Z]{6}[A-Z0-9]{2,5}">
-								</div>
-							</div>
-							<p class="small">* Pflichtfeld</p>
-							<button class="btn btn-default"><span class="foemi hidden">Dauerauftrag abschließen</span><span class="lastschrift">Jetzt spenden</span></button>
-						</form>
-						<a class="btn btn-back" href="javascript:showMenu()">zurück zur Auswahl</a>
+				<div id="method-card" class="hidden">
+					<h2 class="payment-form-title">Kreditkartenzahlung (<span class="payment-amount"></span>)</h2>
+
+					<div class="card-form">
+						<div class="field-group card-name-group">
+							<label for="card-name">Karteninhaber*in *</label>
+							<input type="text" name="card-name" id="card-name" placeholder="Max Mustermann"
+										 autocomplete="name" required>
+							<div class="field-error"></div>
+						</div>
+
+						<div class="field-group card-email-group">
+							<label for="card-email">E-Mail *</label>
+							<input type="email" name="card-email" id="card-email" placeholder="max.mustermann@example.com"
+										 autocomplete="email" required>
+							<div class="field-error"></div>
+						</div>
+
+						<div class="field-group card-info-group">
+							<label for="card-elem">Karteninformationen *</label>
+							<div id="card-elem" class="is-input"></div>
+							<div class="field-error"></div>
+						</div>
+
+						<div class="form-error"></div>
+						<button class="btn btn-back card-submit">Zahlungspflichtig spenden</button>
+					</div>
+
+					<button class="btn btn-back" onclick="showMenu()">zurück zur Auswahl</button>
+				</div>
+
+				<div id="method-sepa" class="hidden">
+					<h2 class="payment-form-title">SEPA-Lastschrift (<span class="payment-amount"></span>)</h2>
+
+					<div class="sepa-form">
+						<div class="field-group sepa-name-group">
+							<label for="sepa-name">Kontoinhaber*in *</label>
+							<input type="text" name="sepa-name" id="sepa-name" placeholder="Max Mustermann"
+										 autocomplete="name" required>
+							<div class="field-error"></div>
+						</div>
+
+						<div class="field-group sepa-email-group">
+							<label for="sepa-email">E-Mail *</label>
+							<input type="email" name="sepa-email" id="sepa-email" placeholder="max.mustermann@example.com"
+										 autocomplete="email" required>
+							<div class="field-error"></div>
+						</div>
+
+						<div class="field-group sepa-iban-group" >
+							<label for="sepa-iban-elem">IBAN *</label>
+							<div id="sepa-iban-elem" class="is-input"></div>
+							<div class="field-error"></div>
+						</div>
+
+						<div class="sepa-notice">
+							By providing your IBAN and confirming this payment, you are authorizing LINKS and Stripe,
+							our payment service provider, to send instructions to your bank to debit your account and your bank
+							to debit your account in accordance with those instructions. You are entitled to a refund from your
+							bank under the terms and conditions of your agreement with your bank. A refund must be claimed within
+							8 weeks starting from the date on which your account was debited.
+						</div>
+
+						<div class="form-error"></div>
+						<button class="btn btn-back sepa-submit">Mandat bestätigen und spenden</button>
+					</div>
+
+					<button class="btn btn-back" onclick="showMenu()">zurück zur Auswahl</button>
 				</div>
 
 				<div id="method-transfer" class="hidden">
 					<h2>Überweisung</h2>
 					<p>Unsere Arbeit lässt sich leichter planen, wenn wir regelmäßige Spenden erhalten. Möchtest du vielleicht einen <b>Dauerauftrag</b> abschließen?</p>
+					<br>
 					<div class="grp-transfer-outer">
 						<div class="grp-transfer border">
-							<strong>Inhaber:</strong> LINKS<br />
-							<strong>IBAN:</strong> AT31 1400 0100 1020 8128<br />
-							<strong>BIC:</strong> BAWAATWWXXX
+							<strong>Inhaber: </strong>LINKS<br />
+							<strong>IBAN: </strong>AT31 1400 0100 1020 8128<br />
+							<strong>BIC: </strong>BAWAATWWXXX
 						</div>
 					</div>
-					<a class="btn btn-back" href="javascript:showMenu()">zurück zur Auswahl</a>
+					<br>
+					<a class="btn btn-back" onclick="showMenu()">zurück zur Auswahl</a>
+				</div>
+
+				<div id="swipe-thanks" class="hidden">
+					<h2>VIELEN DANK FÜR DEINE UNTERSTÜTZUNG!</h2>
+					<br>
+					<p>Deine Spende ist eine große Hilfe für unsere Arbeit für eine starke Linke.</p>
+					<div class="extra-info"></div>
 				</div>
 			</div>
 		</section>
@@ -214,61 +242,18 @@
 
 	<!-- scripts -->
 	<script type="text/javascript" src="js/jquery.min.js"></script>
-	<script type="text/javascript" src="js/jspdf.min.js"></script>
+	<!-- <script type="text/javascript" src="js/jspdf.min.js"></script> - This was used for old sepa mandates -->
 	<script type="text/javascript" src="js/site.js"></script>
 	<script type="text/javascript" src="js/slick.min.js"></script>
 	<script src="https://js.stripe.com/v3"></script>
+	<script type="application/javascript" src="js/new.js"></script>
 
-	<script>
-		// initialize Stripe API
-	  var stripe = Stripe('$YOUR_ACTUAL_STRIPE_API_KEY');
+	<script type="application/javascript">
+		/* Enter amount based on url parameter */
+		checkInitialAmount();
 
-		// Called when Credit Card button is clicked
-		var redirectToStripe = function () {
-			// Get amount and interval values
-			var amount = document.querySelector('input[name="amount"]:checked').value;
-			var interval = document.querySelector('input[name="interval"]:checked').value;
-
-			// List of Product/Price IDs -> if you want different amounts or intervals create new IDs in Stripe Dashboard
-			var stripeIDs = [
-				{ interval: 1, amount: 10, id: '$YOUR_ACTUAL_STRIPE_PRICE_ID' },
-				{ interval: 1, amount: 25, id: '$YOUR_ACTUAL_STRIPE_PRICE_ID' },
-				{ interval: 1, amount: 50, id: '$YOUR_ACTUAL_STRIPE_PRICE_ID' },
-				{ interval: 1, amount: 100, id: '$YOUR_ACTUAL_STRIPE_PRICE_ID' },
-				{ interval: 1, amount: 200, id: '$YOUR_ACTUAL_STRIPE_PRICE_ID' },
-				{ interval: 0, amount: 10, id: '$YOUR_ACTUAL_STRIPE_PRICE_ID' },
-				{ interval: 0, amount: 25, id: '$YOUR_ACTUAL_STRIPE_PRICE_ID' },
-				{ interval: 0, amount: 50, id: '$YOUR_ACTUAL_STRIPE_PRICE_ID' },
-				{ interval: 0, amount: 100, id: '$YOUR_ACTUAL_STRIPE_PRICE_ID' },
-				{ interval: 0, amount: 200, id: '$YOUR_ACTUAL_STRIPE_PRICE_ID' },
-			]
-
-			// Selected correct ID for selected amount/interval combination
-			var selectedStripeID = stripeIDs.find(function (price) {
-				return price.interval == interval && price.amount == amount
-			}).id;
-
-			// Redirect to Stripe Checkout
-			stripe.redirectToCheckout({
-				lineItems: [{price: selectedStripeID, quantity: 1}],
-				mode: interval == 1 ? 'subscription' : 'payment',
-				// Do not rely on the redirect to the successUrl for fulfilling
-				// purchases, customers may not always reach the success_url after
-				// a successful payment.
-				// Instead use one of the strategies described in
-				// https://stripe.com/docs/payments/checkout/fulfillment
-				successUrl: window.location.protocol + '//spenden.links-wien.at/danke.html',
-				cancelUrl: window.location.protocol + '//spenden.links-wien.at',
-			})
-			.then(function (result) {
-				if (result.error) {
-					// If `redirectToCheckout` fails due to a browser or network
-					// error, display the localized error message to your customer.
-					var displayError = document.getElementById('error-message');
-					displayError.textContent = result.error.message;
-				}
-			});
-		}
+		// Show / Hide custom amount
+		init();
 	</script>
 </body>
 </html>

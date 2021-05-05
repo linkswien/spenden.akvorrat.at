@@ -1,0 +1,113 @@
+.field-group {
+    display: inline-block;
+    padding: 4px 16px;
+}
+
+.field-group label {
+    user-select: none;
+}
+
+.field-group input {
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.field-group .field-error {
+    color: #920808;
+    font-size: 14px;
+    padding: 4px;
+}
+
+.field-group .field-error:empty {
+    display: none;
+}
+
+.form-error {
+    color: #920808;
+    width: 100%;
+}
+
+.form-error:empty {
+    display: none;
+}
+
+.custom-amount-group {
+    width: 58px;
+    margin-top: 5px;
+    padding: 0;
+}
+
+.custom-amount-group input {
+    padding: .3rem;
+}
+
+.payment-form-title {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.sepa-form, .card-form {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.sepa-form .sepa-notice {
+    font-size: 12px;
+    padding: 8px 16px;
+}
+
+.sepa-form .sepa-name-group, .card-form .card-name-group {
+    flex: 0.5 50%;
+}
+
+.sepa-form .sepa-email-group, .card-form .card-email-group {
+    flex: 0.5 50%;
+}
+
+.sepa-form .sepa-iban-group, .card-form .card-info-group {
+    flex: 1 100%;
+}
+
+/* Tablet and mobile */
+@media screen and (max-width: 768px) {
+    .sepa-form .sepa-name-group {
+        flex: 1 100%;
+    }
+
+    .sepa-form .sepa-email-group {
+        flex: 1 100%;
+    }
+}
+
+.sepa-form .sepa-submit, .card-form .card-submit {
+    max-width: 450px;
+    width: 100%;
+}
+
+.button-loading-bar {
+    margin-top: 4px;
+    margin-bottom: -8px;
+    height: 5px;
+    position: relative;
+    overflow: hidden;
+}
+
+.button-loading-bar::before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background: rgba(94, 33, 158, 0.8);
+    left: 0;
+    right: 100%;
+    animation: loading-bar-animation 1.5s cubic-bezier(0,0,.3,1) 1.5s infinite;
+}
+
+@keyframes loading-bar-animation {
+    0% {left: -25%; right: 100%}
+    50% {left: 20%; right: 20%}
+    100% {left: 100%; right: -10%}
+}

@@ -122,27 +122,32 @@ jQuery(document).ready(function () {
 		setPaymentInterval(this.value);
 	});
 	$("#methods input[name='amount']").change(function () {
-		setPaymentAmount(this.value);
+		setPaymentAmount();
 	});
 	$("#methods input[name='amount'] + label > .amount-input").on("keyup mouseup input", function () {
-		setPaymentAmount(this.value);
+		setPaymentAmount();
 	});
+	$("#custom-amount").change(function() {
+		setPaymentAmount();
+	})
 });
 
 // user selects different amount
 
-function setPaymentAmount(amount) {
+function setPaymentAmount() {
+	if (!isAmountValid()) return;
+
+	const amount = getAmount();
 	$("#debit-amount").attr("value", amount);
 	$("#paypal-1-amount").attr("value", amount);
 	$("#paypal-2-amount").attr("value", amount);
 	$("#credit-amount").attr("value", amount);
 
-	if (amount < 50)
+	if (amount < 50) {
 		$("#button-debit").addClass("disabled");
-	else if ($("#methods input[name='interval']:checked").val() == 0)
-		$("#button-debit").removeClass("disabled");
+	}
 
-	if ($("#methods input[name='interval']:checked").val() != 0 || amount >= 75) {
+	if (amount >= 75) {
 		$(".abovelimit").removeClass("hidden");
 		$(".belowlimit").addClass("hidden");
 	} else {
