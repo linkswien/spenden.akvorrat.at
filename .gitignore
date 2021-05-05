@@ -3,3 +3,5 @@
 
 # deployment script
 deploy.sh
+.idea
+*.iml
