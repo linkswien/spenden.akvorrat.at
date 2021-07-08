@@ -693,6 +693,11 @@ label.space {
 .btn.btn-default {
 	color: rgba(255, 255, 255, 1);
 }
+.btn.btn-back {
+	font-size: 70%;
+	padding: .5rem;
+	width: 100px;
+}
 
 .btn:not(:disabled):hover {
 	color: rgba(255, 255, 255, 1);

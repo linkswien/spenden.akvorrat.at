@@ -137,7 +137,8 @@
 
 			<div id="payment-methods">
 				<div id="method-card" class="hidden">
-					<h2 class="payment-form-title">Kreditkartenzahlung (<span class="payment-amount"></span>)</h2>
+					<h2 class="payment-form-title">Spende mit Kreditkarte</h2>
+					<p style="text-align:center;">Gib deine Kreditkarten-Daten ein und bestätige deine <b><span class="payment-interval"></span>e</b> Spende über <b>€ <span class="payment-amount"></span></b>.</p>
 
 					<div class="card-form">
 						<div class="field-group card-name-group">
@@ -161,14 +162,15 @@
 						</div>
 
 						<div class="form-error"></div>
-						<button class="btn btn-back card-submit">Zahlungspflichtig spenden</button>
+						<button class="btn card-submit">Zahlungspflichtig spenden</button>
 					</div>
 
-					<button class="btn btn-back" onclick="showMenu()">zurück zur Auswahl</button>
+					<button class="btn btn-back" onclick="showMenu()">Zurück</button>
 				</div>
 
 				<div id="method-sepa" class="hidden">
-					<h2 class="payment-form-title">SEPA-Lastschrift (<span class="payment-amount"></span>)</h2>
+					<h2 class="payment-form-title">Spende via SEPA-Lastschrift</h2>
+					<p style="text-align:center;">Gib deine Kontodaten ein und bestätige deine <b><span class="payment-interval"></span>e</b> Spende über <b>€ <span class="payment-amount"></span></b>.</p>
 
 					<div class="sepa-form">
 						<div class="field-group sepa-name-group">
@@ -200,10 +202,10 @@
 						</div>
 
 						<div class="form-error"></div>
-						<button class="btn btn-back sepa-submit">Mandat bestätigen und spenden</button>
+						<button class="btn sepa-submit">Mandat bestätigen und spenden</button>
 					</div>
 
-					<button class="btn btn-back" onclick="showMenu()">zurück zur Auswahl</button>
+					<button class="btn btn-back" onclick="showMenu()">Zurück</button>
 				</div>
 
 				<div id="method-transfer" class="hidden">
@@ -218,7 +220,7 @@
 						</div>
 					</div>
 					<br>
-					<a class="btn btn-back" onclick="showMenu()">zurück zur Auswahl</a>
+					<a class="btn btn-back" onclick="showMenu()">Zurück</a>
 				</div>
 
 				<div id="swipe-thanks" class="hidden">
