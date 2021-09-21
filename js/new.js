@@ -14,7 +14,8 @@ function gotoPaymentForm(name) {
     return;
   }
 
-  $(".payment-amount").text(`${getAmount()}€, ${getInterval() === 0 ? "einmalig" : "monatlich"}`);
+  $(".payment-amount").text(getAmount());
+  $(".payment-interval").text(`${getInterval() === 0 ? "einmalig" : "monatlich"}`);
   swipe(name);
 }
 
