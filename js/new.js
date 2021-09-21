@@ -114,35 +114,70 @@ function initSepaForm(sepaForm) {
     const amount = getAmount();
     const interval = getInterval();
 
-    stripe.createSource(sepaIbanElement, {
-      type: 'sepa_debit',
-      currency: 'eur',
-      owner: {name: sepaForm.querySelector("#sepa-name").value}
-    }).then(result => {
-      if (result.error)
-        throw new Error(result.error);
+    let promise;
+    if (interval === 0) {
+      promise = postJson("/payment-intent", {email, amount})
+        .then(resp => resp.json())
+        .then(jsonData => {
+          if (jsonData.error != null) {
+            throw new Error(jsonData.error)
+          }
 
-      return postJson("/donate/sepa", {
-        email,
-        amount,
-        type: interval === 0 ? "one-time" : "monthly",
-        sourceId: result.source.id
-      });
-    }).then(r => r.json()).then(data => {
-      if (data.error)
-        throw new Error(data.error);
+          return stripe.confirmSepaDebitPayment(jsonData["secret"], {
+            payment_method: {
+              sepa_debit: sepaIbanElement,
+              billing_details: {
+                name: sepaForm.querySelector("#sepa-name").value,
+                email
+              }
+            }
+          })
+        })
+        .then(result => {
+          if (result.error != null)
+            throw new Error(result.error);
 
-      if (data.mandateUrl != null) {
-        document.querySelector("#swipe-thanks .extra-info").innerHTML = 'Im Zuge dieser Zahlung wurde ein ' +
-          'SEPA Mandat ausgestellt. Dieses kannst du <a href="' + data.mandateUrl + '" target="_blank">hier</a> einsehen.';
-      }
-      swipe("swipe-thanks");
-    }).catch(err => {
-      errorElem.innerHTML = err.message;
-      console.error(err);
-    }).then(() => { // then after catch is finally
-      setButtonLoading(submitButton, false)
-    })
+          return postJson("/payment-intent/finish", {
+            intentId: result.paymentIntent.id
+          })
+        })
+    } else {
+      promise = stripe.createSource(sepaIbanElement, {
+        type: 'sepa_debit',
+        currency: 'eur',
+        owner: {name: sepaForm.querySelector("#sepa-name").value}
+      }).then(result => {
+        if (result.error != null)
+          throw new Error(result.error);
+
+        return postJson("/donate/sepa", {
+          email,
+          amount,
+          type: interval === 0 ? "one-time" : "monthly",
+          sourceId: result.source.id
+        });
+      })
+    }
+
+    promise
+      .then(response => response.json())
+      .then(data => {
+        if (data.error != null)
+          throw new Error(data.error);
+
+        if (data.mandateUrl != null) {
+          document.querySelector("#swipe-thanks .extra-info").innerHTML = 'Im Zuge dieser Zahlung wurde ein ' +
+            'SEPA Mandat ausgestellt. Dieses kannst du <a href="' + data.mandateUrl + '" target="_blank">hier</a> einsehen.';
+        }
+        swipe("swipe-thanks");
+      })
+      .catch(err => {
+        errorElem.innerHTML = err.message;
+        console.error(err);
+      })
+      .then(() => { // then after catch is finally
+        setButtonLoading(submitButton, false)
+      })
   })
 }
 
@@ -190,31 +225,67 @@ function initCardForm(cardForm) {
     const amount = getAmount();
     const interval = getInterval();
 
-    stripe.createSource(cardInfoElement, {
-      type: 'card',
-      currency: 'eur',
-      owner: {name: cardForm.querySelector("#card-name").value}
-    }).then(result => {
-      if (result.error)
-        throw new Error(result.error);
+    let promise;
+    if (interval === 0) {
+      promise = postJson("/payment-intent", {email, amount})
+        .then(resp => resp.json())
+        .then(jsonData => {
+          if (jsonData["error"] != null) {
+            throw new Error(jsonData["error"])
+          }
 
-      return postJson("/donate/card", {
-        email,
-        amount,
-        type: interval === 0 ? "one-time" : "monthly",
-        sourceId: result.source.id
+          return stripe.confirmCardPayment(jsonData["secret"], {
+            payment_method: {
+              card: cardInfoElement,
+              billing_details: {
+                name: cardForm.querySelector("#card-name").value,
+                email
+              }
+            }
+          })
+        })
+        .then(result => {
+          if (result.error != null)
+            throw new Error(result.error);
+
+          return postJson("/payment-intent/finish", {
+            intentId: result.paymentIntent.id
+          })
+        })
+    } else {
+      promise = stripe.createSource(cardInfoElement, {
+        type: 'card',
+        currency: 'eur',
+        owner: {name: cardForm.querySelector("#card-name").value}
+      }).then(result => {
+        if (result.error)
+          throw new Error(result.error);
+
+        return postJson("/donate/card", {
+          email,
+          amount,
+          type: interval === 0 ? "one-time" : "monthly",
+          sourceId: result.source.id
+        })
       })
-    }).then(response => response.json()).then(jsonData => {
-      if (jsonData.error)
-        throw new Error(jsonData.error);
+    }
 
-      swipe("swipe-thanks");
-    }).catch(err => {
-      errorElem.innerHTML = err.message;
-      console.error(err);
-    }).then(() => { // then after catch is finally
-      setButtonLoading(submitButton, false)
-    })
+    // Shared part of promise
+    promise
+      .then(response => response.json())
+      .then(jsonData => {
+        if (jsonData.error)
+          throw new Error(jsonData.error);
+
+        swipe("swipe-thanks");
+      })
+      .catch(err => {
+        errorElem.innerHTML = err.message;
+        console.error(err);
+      })
+      .then(() => {
+        setButtonLoading(submitButton, false)
+      })
   });
 }
 
