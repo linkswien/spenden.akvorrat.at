@@ -36,7 +36,15 @@ function checkInitialAmount() {
 
 function isAmountValid() {
   const amount = getAmount();
-  return !isNaN(amount) && amount >= 1;
+  if (isNaN(amount) || amount < 1) {
+    return false;
+  }
+
+  if (getInterval() === 0) {
+    return amount < 1000;
+  } else {
+    return amount < 500;
+  }
 }
 
 function init() {
