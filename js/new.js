@@ -119,13 +119,14 @@ function initSepaForm(sepaForm) {
     if (validationResults.some(valid => !valid)) return;
     setButtonLoading(submitButton, true)
 
+    const name = sepaForm.querySelector("#sepa-name").value;
     const email = sepaForm.querySelector("#sepa-email").value;
     const amount = getAmount();
     const interval = getInterval();
 
     let promise;
     if (interval === 0) {
-      promise = postJson("/payment-intent", {email, amount})
+      promise = postJson("/payment-intent", {name, email, amount})
         .then(resp => resp.json())
         .then(jsonData => {
           if (jsonData.error != null) {
@@ -136,7 +137,7 @@ function initSepaForm(sepaForm) {
             payment_method: {
               sepa_debit: sepaIbanElement,
               billing_details: {
-                name: sepaForm.querySelector("#sepa-name").value,
+                name,
                 email
               }
             }
@@ -154,12 +155,13 @@ function initSepaForm(sepaForm) {
       promise = stripe.createSource(sepaIbanElement, {
         type: 'sepa_debit',
         currency: 'eur',
-        owner: {name: sepaForm.querySelector("#sepa-name").value}
+        owner: {name}
       }).then(result => {
         if (result.error != null)
           throw new Error(result.error);
 
         return postJson("/donate/sepa", {
+          name,
           email,
           amount,
           type: interval === 0 ? "one-time" : "monthly",
@@ -230,13 +232,14 @@ function initCardForm(cardForm) {
     if (validationResults.some(valid => !valid)) return;
     setButtonLoading(submitButton, true)
 
+    const name = cardForm.querySelector("#card-name").value;
     const email = cardForm.querySelector("#card-email").value;
     const amount = getAmount();
     const interval = getInterval();
 
     let promise;
     if (interval === 0) {
-      promise = postJson("/payment-intent", {email, amount})
+      promise = postJson("/payment-intent", {name, email, amount})
         .then(resp => resp.json())
         .then(jsonData => {
           if (jsonData["error"] != null) {
@@ -247,7 +250,7 @@ function initCardForm(cardForm) {
             payment_method: {
               card: cardInfoElement,
               billing_details: {
-                name: cardForm.querySelector("#card-name").value,
+                name,
                 email
               }
             }
@@ -265,12 +268,13 @@ function initCardForm(cardForm) {
       promise = stripe.createSource(cardInfoElement, {
         type: 'card',
         currency: 'eur',
-        owner: {name: cardForm.querySelector("#card-name").value}
+        owner: {name}
       }).then(result => {
         if (result.error)
           throw new Error(result.error);
 
         return postJson("/donate/card", {
+          name,
           email,
           amount,
           type: interval === 0 ? "one-time" : "monthly",
