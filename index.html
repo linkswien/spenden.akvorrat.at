@@ -105,29 +105,6 @@
 						<a onclick="gotoPaymentForm('method-sepa')">
 							<div class="column"><i class="fa fa-university" aria-hidden="true"></i><span>Lastschrift</span></div>
 						</a>
-
-						<!--form id="form-paypal-1" name="_xclick" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" autocomplete="off" class="nospace">
-							<input type="hidden" name="a3" id="paypal-1-amount" value="25">
-							<input type="hidden" name="p3" id="paypal-1-interval" value="1">
-							<input type="hidden" name="t3" value="M">
-							<input type="hidden" name="cmd" value="_xclick-subscriptions">
-							<input type="hidden" name="business" value="spenden@links-wien.at">
-							<input type="hidden" name="src" value="1">
-							<input type="hidden" name="currency_code" value="EUR">
-							<a id="button-paypal-1" type="submit">
-								<div class="column"><i class="fa fa-paypal" aria-hidden="true"></i><span>Paypal</span></div>
-							</a>
-						</form>
-						<form id="form-paypal-2" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" autocomplete="off" class="hidden nospace">
-							<input type="hidden" name="business" value="spenden@links-wien.at">
-							<input type="hidden" name="amount" id="paypal-2-amount" value="25">
-							<input type="hidden" name="item_name" value="Spende an LINKS Wien">
-							<input type="hidden" name="cmd" value="_donations">
-							<input type="hidden" name="currency_code" value="EUR">
-							<a id="button-paypal-2" type="submit">
-								<div class="column"><i class="fa fa-paypal" aria-hidden="true"></i><span>Paypal</span></div>
-							</a>
-						</form-->
 					</div>
 				</div>
 				<p class="center small">
@@ -151,7 +128,28 @@
 						<div class="field-group card-email-group">
 							<label for="card-email">E-Mail *</label>
 							<input type="email" name="card-email" id="card-email" placeholder="vorname.nachname@example.com"
-										 autocomplete="email" required>
+								   autocomplete="email" required>
+							<div class="field-error"></div>
+						</div>
+						
+						<div class="field-group card-street-group address-group hidden">
+							<label for="card-street">Straße *</label>
+							<input type="text" name="card-street" id="card-street" placeholder="Musterstraße 17"
+								   autocomplete="street-address" required>
+							<div class="field-error"></div>
+						</div>
+
+						<div class="field-group card-postcode-group address-group hidden">
+							<label for="card-postcode">Postleitzahl *</label>
+							<input type="text" name="card-postcode" id="card-postcode" placeholder="1010"
+								   maxlength="4" autocomplete="postal-code" required>
+							<div class="field-error"></div>
+						</div>
+
+						<div class="field-group card-city-group address-group hidden">
+							<label for="card-city">Stadt / Ort *</label>
+							<input type="text" name="card-city" id="card-city" placeholder="Wien"
+								   autocomplete="address-level2" required>
 							<div class="field-error"></div>
 						</div>
 
@@ -184,6 +182,27 @@
 							<label for="sepa-email">E-Mail *</label>
 							<input type="email" name="sepa-email" id="sepa-email" placeholder="vorname.nachname@example.com"
 										 autocomplete="email" required>
+							<div class="field-error"></div>
+						</div>
+
+						<div class="field-group sepa-street-group address-group hidden">
+							<label for="sepa-street">Straße *</label>
+							<input type="text" name="sepa-street" id="sepa-street" placeholder="Musterstraße 17"
+								   autocomplete="street-address" required>
+							<div class="field-error"></div>
+						</div>
+
+						<div class="field-group sepa-postcode-group address-group hidden">
+							<label for="sepa-postcode">Postleitzahl *</label>
+							<input type="text" name="sepa-postcode" id="sepa-postcode" placeholder="1010"
+								   maxlength="4" autocomplete="postal-code" required>
+							<div class="field-error"></div>
+						</div>
+
+						<div class="field-group sepa-city-group address-group hidden">
+							<label for="sepa-city">Stadt / Ort *</label>
+							<input type="text" name="sepa-city" id="sepa-city" placeholder="Wien"
+								   autocomplete="address-level2" required>
 							<div class="field-error"></div>
 						</div>
 
@@ -249,13 +268,5 @@
 	<script type="application/javascript" src="js/slick.min.js"></script>
 	<script type="application/javascript" src="https://js.stripe.com/v3"></script>
 	<script type="application/javascript" src="js/new.js"></script>
-
-	<script type="application/javascript">
-		/* Enter amount based on url parameter */
-		checkInitialAmount();
-
-		// Show / Hide custom amount
-		init();
-	</script>
 </body>
 </html>

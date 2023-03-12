@@ -58,15 +58,23 @@
     padding: 8px 16px;
 }
 
-.sepa-form .sepa-name-group, .card-form .card-name-group {
+.card-form .card-name-group,
+.card-form .card-email-group,
+.card-form .card-postcode-group,
+.card-form .card-city-group,
+.sepa-form .sepa-name-group,
+.sepa-form .sepa-email-group,
+.sepa-form .sepa-postcode-group,
+.sepa-form .sepa-city-group
+{
     flex: 0.5 50%;
 }
 
-.sepa-form .sepa-email-group, .card-form .card-email-group {
-    flex: 0.5 50%;
-}
-
-.sepa-form .sepa-iban-group, .card-form .card-info-group {
+.sepa-form .sepa-iban-group,
+.sepa-form .sepa-street-group,
+.card-form .card-info-group,
+.card-form .card-street-group
+{
     flex: 1 100%;
 }
 
