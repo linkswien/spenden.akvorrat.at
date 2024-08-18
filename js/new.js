@@ -158,57 +158,32 @@ function initSepaForm(sepaForm) {
     const amount = getAmount();
     const interval = getInterval();
 
-    let promise;
-    if (interval === 0) {
-      promise = postJson("/payment-intent", {name, email, amount})
-        .then(resp => resp.json())
-        .then(jsonData => {
-          if (jsonData.error != null) {
-            throw getError(jsonData.error)
-          }
-
-          return stripe.confirmSepaDebitPayment(jsonData["secret"], {
-            payment_method: {
-              sepa_debit: sepaIbanElement,
-              billing_details: {
-                name,
-                email,
-                address: getAddress(street, postcode, city)
-              }
-            }
-          })
-        })
-        .then(result => {
-          if (result.error != null)
-            throw getError(result.error);
-
-          return postJson("/payment-intent/finish", {
-            intentId: result.paymentIntent.id
-          })
-        })
-    } else {
-      promise = stripe.createSource(sepaIbanElement, {
-        type: 'sepa_debit',
-        currency: 'eur',
-        owner: {
-          name,
-          address: getAddress(street, postcode, city)
+    postJson(interval === 0 ? "/payment-intent" : "/subscription", { name, email, amount })
+      .then(resp => resp.json())
+      .then(jsonData => {
+        if (jsonData.error != null) {
+          throw getError(jsonData.error)
         }
-      }).then(result => {
+
+        return stripe.confirmSepaDebitPayment(jsonData["secret"], {
+          payment_method: {
+            sepa_debit: sepaIbanElement,
+            billing_details: {
+              name,
+              email,
+              address: getAddress(street, postcode, city)
+            }
+          }
+        })
+      })
+      .then(result => {
         if (result.error != null)
           throw getError(result.error);
 
-        return postJson("/donate/sepa", {
-          name,
-          email,
-          amount,
-          type: interval === 0 ? "one-time" : "monthly",
-          sourceId: result.source.id
-        });
+        return postJson("/payment-intent/finish", {
+          intentId: result.paymentIntent.id
+        })
       })
-    }
-
-    promise
       .then(response => response.json())
       .then(data => {
         if (data.error != null)
@@ -288,58 +263,35 @@ function initCardForm(cardForm) {
     const amount = getAmount();
     const interval = getInterval();
 
-    let promise;
-    if (interval === 0) {
-      promise = postJson("/payment-intent", {name, email, amount})
-        .then(resp => resp.json())
-        .then(jsonData => {
-          if (jsonData["error"] != null) {
-            throw getError(jsonData["error"])
-          }
-
-          return stripe.confirmCardPayment(jsonData["secret"], {
-            payment_method: {
-              card: cardInfoElement,
-              billing_details: {
-                name,
-                email,
-                address: getAddress(street, postcode, city)
-              }
-            }
-          })
-        })
-        .then(result => {
-          if (result.error != null)
-            throw getError(result.error);
-
-          return postJson("/payment-intent/finish", {
-            intentId: result.paymentIntent.id
-          })
-        })
-    } else {
-      promise = stripe.createSource(cardInfoElement, {
-        type: 'card',
-        currency: 'eur',
-        owner: {
-          name,
-          address: getAddress(street, postcode, city)
+    postJson(interval === 0 ? "/payment-intent" : "/subscription", { name, email, amount })
+      .then(resp => resp.json())
+      .then(jsonData => {
+        if (jsonData["error"] != null) {
+          throw getError(jsonData["error"])
         }
-      }).then(result => {
-        if (result.error)
-          throw getError(result.error);
 
-        return postJson("/donate/card", {
-          name,
-          email,
-          amount,
-          type: interval === 0 ? "one-time" : "monthly",
-          sourceId: result.source.id
+        return stripe.confirmCardPayment(jsonData["secret"], {
+          payment_method: {
+            card: cardInfoElement,
+            billing_details: {
+              name,
+              email,
+              address: getAddress(street, postcode, city)
+            }
+          },
+          return_url: donationServerUrl,
         })
       })
-    }
+      .then(result => {
+        if (result.error != null)
+          throw getError(result.error);
+        else if (result.last_payment_error != null)
+          throw getError(result.last_payment_error);
 
-    // Shared part of promise
-    promise
+        return postJson("/payment-intent/finish", {
+          intentId: result.paymentIntent.id
+        })
+      })
       .then(response => response.json())
       .then(jsonData => {
         if (jsonData.error)
@@ -373,6 +325,8 @@ function getAddress(street, postcode, city) {
 function getError(error) {
   if (typeof error === "string") {
     return new Error(error);
+  } else if (error && error["message"]) {
+    return new Error(error["message"]);
   } else {
     return new Error(JSON.stringify(error))
   }
