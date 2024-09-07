@@ -279,7 +279,6 @@ function initCardForm(cardForm) {
               address: getAddress(street, postcode, city)
             }
           },
-          return_url: donationServerUrl,
         })
       })
       .then(result => {
